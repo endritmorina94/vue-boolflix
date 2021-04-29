@@ -4,3 +4,74 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.wrapper {
+    height: 100vh;
+}
+
+img {
+    width: 100%;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    padding: 15px;
+    background-color: black;
+}
+
+h1 {
+    color: white;
+}
+/* FINE HEADER */
+
+/* MAIN */
+main {
+    background-color: darkgrey;
+    width: 100%;
+    height: calc(100% - 68px);
+    padding: 20px 10px 20px 30px;
+    overflow-y: auto;
+}
+
+.movies-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.movie {
+    width: calc(100% / 6 - 20px);
+    margin-right: 20px;
+    margin-bottom: 20px;
+    height: 300px;
+    background-color: white;
+    position: relative;
+    cursor: pointer;
+    padding: 20px;
+}
+
+.movie img {
+    width: 100%;
+    height: 300px;
+    object-fit: fill;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.movie:hover img {
+    display: none;
+}
+
+.movie-info {
+    list-style-type: none;
+}
+
+.movie-info li {
+    margin-bottom: 15px;
+}

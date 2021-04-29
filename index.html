@@ -10,10 +10,39 @@
     </head>
     <body>
 
-        <div id="root" class="">
-            <ul>
-                <li v-for="movie in movies"> {{ movie.original_title }}</li>
-            </ul>
+        <div id="root" class="wrapper">
+            <header>
+                <h1>Boolflix</h1>
+                <div class="search">
+                    <input type="text" v-model="query" @keyup.enter="find()">
+                    <button class="search-button">Cerca</button>
+                </div>
+            </header>
+            <main>
+                <div class="movies-container">
+                    <div v-for="movie in movies" class="movie">
+                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
+                        <ul class="movie-info">
+                            <li>
+                                <b>Titolo:</b>
+                                {{ movie.title }}
+                            </li>
+                            <li>
+                                <b>Titolo originale:</b>
+                                {{ movie.original_title }}
+                            </li>
+                            <li>
+                                <b>Lingua:</b>
+                                {{ movie.original_language }}
+                            </li>
+                            <li>
+                                <b>Voto:</b>
+                                {{ movie.vote_average }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </main>
         </div>
 
 
