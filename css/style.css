@@ -86,3 +86,8 @@ main {
 .card-info i {
     color: gold;
 }
+
+.actor:not(:last-child)::after,
+.genre:not(:last-child)::after {
+    content: ", ";
+}

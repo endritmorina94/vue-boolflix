@@ -6,7 +6,6 @@ var app = new Vue(
             query: "",
             movies: [],
             series: [],
-            movieIds : [],
             // Bandiere disponibili
             languages: ["en", "de", "it", "fr", "ru"]
         },
@@ -22,18 +21,20 @@ var app = new Vue(
                           page : 1
                         }
                     }).then((response) => {
+                        //Metto in una variabile i film
                         let result = response.data.results;
 
+                        //Filtro quelli senza poster e con bandiera diversa da quelle disponibili
                         result = this.filterEmptyFields(result);
+                        //Cambio il voto da decimi a quinti
                         this.splitVote(result);
-                            this.movies= result;
-                        this.addGenresAndCredits(this.movies, "movie");
-
-
-                        console.log(this.movies);
+                        //Aggiungo i generi e i primi 5 attori del cast
+                        this.addGenresAndCredits(result, "movie");
+                        //Passo il tutto all'array movies
+                        this.movies= result;
                     });
 
-                //Seconda chiamata per le serie
+                //Seconda chiamata per le serie (tutto quello che abbiamo fatto sopra ma con le serie)
                 axios
                     .get("https://api.themoviedb.org/3/search/tv?", {
                         params:
@@ -48,8 +49,6 @@ var app = new Vue(
                         this.splitVote(result);
                         this.addGenresAndCredits(result, "tv");
                         this.series = result;
-
-                        console.log(this.series);
                     });
             },
 
@@ -69,13 +68,18 @@ var app = new Vue(
                             }
                             //Della risposta prenderemo i primi 5 oggetti del cast e aggiugneremo i generi
                         }).then((response) => {
-                            element.cast = response.data.credits.cast.slice(0, 5);
-                            //Dichiariamo un array vuoto per i generi
-                            element.genres = [];
+
+                            //Settiamo un array cast e lo popoliamo con i primi 5 nomi del cast
+                            Vue.set(element, 'cast', response.data.credits.cast.slice(0, 5));
+
+                            //Settiamo un array vuoto chiamato genres per i generi
+                            Vue.set(element, 'genres', []);
                             // Cicliamo i generi e li pushiamo nell'array vuoto
                             response.data.genres.forEach((item) => {
                                 element.genres.push(item.name);
                             });
+
+                            console.log(element);
                         });
                 });
             },
@@ -93,7 +97,6 @@ var app = new Vue(
             }
         },
         mounted() {
-            this.search();
         }
     }
 );
