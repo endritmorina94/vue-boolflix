@@ -56,7 +56,7 @@
                                         n/d
                                     </span>
                                 </li>
-                                <li>
+                                <li v-if="movie.cast.length">
                                     <b>Cast:</b>
                                         <span class="actor" v-for="actor in movie.cast">
                                             {{ actor.name }}
@@ -75,7 +75,7 @@
                                         n/d
                                     </span>
                                 </li>
-                                <li>
+                                <li v-if="movie.genres.length">
                                     <b>Genere:</b>
                                         <span class="genre" v-for="gender in movie.genres">
                                             {{ gender }}
