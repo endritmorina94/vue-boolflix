@@ -6,6 +6,7 @@ var app = new Vue(
             query: "",
             movies: [],
             series: [],
+            movieIds : [],
             // Bandiere disponibili
             languages: ["en", "de", "it", "fr", "ru"]
         },
@@ -14,12 +15,26 @@ var app = new Vue(
             find() {
                 //Prima chiamata per i film
                 axios
-                    .get(`https://api.themoviedb.org/3/search/movie?api_key=${this.key}&query=${this.query}&page=1&language=it-IT`)
+                    .get(`https://api.themoviedb.org/3/search/movie?api_key=${this.key}&query=${this.query}&page=1`)
                     .then((response) => {
-                        const result = response.data.results;
+                        let result = response.data.results;
 
-                        this.movies = this.filterEmptyFields(result);
-                        this.splitVote(this.movies);
+                        result = this.filterEmptyFields(result);
+                        this.splitVote(result);
+
+                        //Ciclo result e per ogni elemento faccio una chiamata utilizzando l'id di ogni elemento per ottenerle i credits
+                        result.forEach((element) => {
+                            axios
+                                .get(`https://api.themoviedb.org/3/movie/${element.id}/credits?api_key=${this.key}&language=it-IT`)
+                                .then((response) => {
+                                    element.cast = response.data.cast.slice(0, 5);
+                                });
+                        });
+
+                        this.movies = result;
+
+                        console.log(result);
+                        console.log(this.movies);
                     });
 
                 //Seconda chiamata per le serie
