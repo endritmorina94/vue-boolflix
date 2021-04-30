@@ -59,8 +59,8 @@
                                 <li>
                                     <b>Cast:</b>
 
-                                        <span v-if="movie.cast.length">
-                                            {{ movie.cast[0].name }}
+                                        <span v-if="movie.cast.length" v-for="(actor, index) in movie.cast">
+                                            {{ movie.cast[index].name }}
                                         </span>
 
                                     <span v-else>
