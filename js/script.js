@@ -26,8 +26,9 @@ var app = new Vue(
 
                         result = this.filterEmptyFields(result);
                         this.splitVote(result);
-                        this.addGenresAndCredits(result, "movie");
-                        this.movies= result;
+                            this.movies= result;
+                        this.addGenresAndCredits(this.movies, "movie");
+
 
                         console.log(this.movies);
                     });
@@ -47,12 +48,17 @@ var app = new Vue(
                         this.splitVote(result);
                         this.addGenresAndCredits(result, "tv");
                         this.series = result;
-                        console.log(result);
+
+                        console.log(this.series);
                     });
             },
 
-            addGenresAndCredits(array, type){
-                array.forEach((element) => {
+            //Questa funzione fa una chiamata axios per ogni film trovato e ne aggiunge i primi 5 oggetti del cast e i generi
+            //moviesOrSeriesArray ==> è l'array di film o serie
+            //type ==> è una stringa con il tipo di ricerca che andremo a fare: "movie" o "tv"
+            addGenresAndCredits(moviesOrSeriesArray, type){
+                //Ciclo tutit gl'elementi dell'array usando il loro id per fare la chiamata axios
+                moviesOrSeriesArray.forEach((element) => {
                     axios
                         .get("https://api.themoviedb.org/3/" + type + "/" + element.id + "?", {
                             params:
@@ -61,9 +67,12 @@ var app = new Vue(
                                 append_to_response : "credits",
                                 language : "it-IT"
                             }
+                            //Della risposta prenderemo i primi 5 oggetti del cast e aggiugneremo i generi
                         }).then((response) => {
                             element.cast = response.data.credits.cast.slice(0, 5);
+                            //Dichiariamo un array vuoto per i generi
                             element.genres = [];
+                            // Cicliamo i generi e li pushiamo nell'array vuoto
                             response.data.genres.forEach((item) => {
                                 element.genres.push(item.name);
                             });
@@ -84,7 +93,7 @@ var app = new Vue(
             }
         },
         mounted() {
-
+            this.search();
         }
     }
 );

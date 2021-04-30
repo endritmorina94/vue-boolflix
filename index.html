@@ -57,6 +57,17 @@
                                     </span>
                                 </li>
                                 <li>
+                                    <b>Cast:</b>
+
+                                        <span v-if="movie.cast.length">
+                                            {{ movie.cast[0].name }}
+                                        </span>
+
+                                    <span v-else>
+                                        n/d
+                                    </span>
+                                </li>
+                                <li>
                                     <b>Overview:</b>
                                     <span v-if="movie.overview.length">
                                         {{ movie.overview }}
