@@ -4,44 +4,124 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title></title>
-         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="css/style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     </head>
     <body>
 
         <div id="root" class="wrapper">
+
+            <!-- Header -->
             <header>
                 <h1>Boolflix</h1>
                 <div class="search">
-                    <input type="text" v-model="query" @keyup.enter="find()">
-                    <button class="search-button">Cerca</button>
+                    <input type="text" v-model="query" >
+                    <button class="search-button" @click="find()">Cerca</button>
                 </div>
             </header>
+            <!-- Fine Header -->
+
             <main>
-                <div class="movies-container">
-                    <div v-for="movie in movies" class="movie">
-                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
-                        <ul class="movie-info">
-                            <li>
-                                <b>Titolo:</b>
-                                {{ movie.title }}
-                            </li>
-                            <li>
-                                <b>Titolo originale:</b>
-                                {{ movie.original_title }}
-                            </li>
-                            <li>
-                                <b>Lingua:</b>
-                                {{ movie.original_language }}
-                            </li>
-                            <li>
-                                <b>Voto:</b>
-                                {{ movie.vote_average }}
-                            </li>
-                        </ul>
+                <!-- Movies Section -->
+                <section>
+                    <h2 v-if="movies.length > 0">Movies</h2>
+                    <!-- Movies Container -->
+                    <div class="posters-container">
+                        <!-- Inizio Single Movie -->
+                        <div v-for="movie in movies" class="card">
+                            <!-- Poster -->
+                            <img class="poster" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
+                            <!-- Movie Infos -->
+                            <ul class="card-info">
+                                <li>
+                                    <b>Titolo:</b>
+                                    {{ movie.title }}
+                                </li>
+                                <li>
+                                    <b>Titolo originale:</b>
+                                    {{ movie.original_title }}
+                                </li>
+                                <li>
+                                    <b>Lingua:</b>
+                                    <img class="flag" :src="`img/flags/${movie.original_language}.svg`" alt="">
+                                </li>
+                                <li>
+                                    <b>Voto:</b>
+                                    <span v-if="movie.vote_average">
+                                        <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="far fa-star"></i>
+                                    </span>
+                                    <span v-else>
+                                        n/d
+                                    </span>
+                                </li>
+                                <li>
+                                    <b>Overview:</b>
+                                    <span v-if="movie.overview.length">
+                                        {{ movie.overview }}
+                                    </span>
+                                    <span v-else>
+                                        n/d
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Fine Single Movie -->
                     </div>
-                </div>
+                    <!-- Fine Movies Container -->
+                </section>
+                <!-- Fine Movies Section -->
+
+                <!-- TV Series Section -->
+                <section>
+                    <h2 v-if="series.length > 0">TV Series</h2>
+                    <!-- TV Series Container -->
+                    <div class="posters-container">
+                        <!-- Inizio Single TV Series -->
+                        <div v-for="serie in series" class="card">
+                            <!-- Poster -->
+                            <img class="poster" :src="`https://image.tmdb.org/t/p/w342${serie.poster_path}`" alt="{{movie.title}}">
+                            <!-- TV Series Infos -->
+                            <ul class="card-info">
+                                <li>
+                                    <b>Titolo:</b>
+                                    {{ serie.name }}
+                                </li>
+                                <li>
+                                    <b>Titolo originale:</b>
+                                    {{ serie.original_name }}
+                                </li>
+                                <li>
+                                    <b>Lingua:</b>
+                                    <img class="flag" :src="`img/flags/${serie.original_language}.svg`" alt="">
+                                </li>
+                                <li>
+                                    <b>Voto:</b>
+                                    <span v-if="serie.vote_average">
+                                        <i v-for="star in serie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - serie.vote_average" class="far fa-star"></i>
+                                    </span>
+                                    <span v-else>
+                                        n/d
+                                    </span>
+                                </li>
+                                <li>
+                                    <b>Overview:</b>
+                                    <span v-if="serie.overview.length">
+                                        {{ serie.overview }}
+                                    </span>
+                                    <span v-else>
+                                        n/d
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Fine Single TV Series -->
+                    </div>
+                    <!-- Fine TV Series Container -->
+                </section>
+                <!-- Fine TV Series Section -->
+
             </main>
         </div>
 
