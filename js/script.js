@@ -12,41 +12,63 @@ var app = new Vue(
         },
         methods: {
             //Questa funzione chiama la ricerca, restituendo i risultati dell'API all'interno dei nostri array movies e series
-            find() {
+            search() {
                 //Prima chiamata per i film
                 axios
-                    .get(`https://api.themoviedb.org/3/search/movie?api_key=${this.key}&query=${this.query}&page=1`)
-                    .then((response) => {
+                    .get("https://api.themoviedb.org/3/search/movie?", {
+                        params:
+                        { api_key : this.key,
+                          query : this.query,
+                          page : 1
+                        }
+                    }).then((response) => {
                         let result = response.data.results;
 
                         result = this.filterEmptyFields(result);
                         this.splitVote(result);
+                        this.addGenresAndCredits(result, "movie");
+                        this.movies= result;
 
-                        //Ciclo result e per ogni elemento faccio una chiamata utilizzando l'id di ogni elemento per ottenerle i credits
-                        result.forEach((element) => {
-                            axios
-                                .get(`https://api.themoviedb.org/3/movie/${element.id}/credits?api_key=${this.key}&language=it-IT`)
-                                .then((response) => {
-                                    element.cast = response.data.cast.slice(0, 5);
-                                });
-                        });
-
-                        this.movies = result;
-
-                        console.log(result);
                         console.log(this.movies);
                     });
 
                 //Seconda chiamata per le serie
                 axios
-                    .get(`https://api.themoviedb.org/3/search/tv?api_key=${this.key}&query=${this.query}&page=1&language=it-IT`)
-                    .then((response) => {
-                        const result = response.data.results;
-                        this.splitVote(result)
+                    .get("https://api.themoviedb.org/3/search/tv?", {
+                        params:
+                        { api_key : this.key,
+                          query : this.query,
+                          page : 1
+                        }
+                    }).then((response) => {
+                        let result = response.data.results;
 
-                        this.series = this.filterEmptyFields(result);
-                        this.splitVote(this.series);
+                        result = this.filterEmptyFields(result);
+                        this.splitVote(result);
+                        this.addGenresAndCredits(result, "tv");
+                        this.series = result;
+                        console.log(result);
                     });
+            },
+
+            addGenresAndCredits(array, type){
+                array.forEach((element) => {
+                    axios
+                        .get("https://api.themoviedb.org/3/" + type + "/" + element.id + "?", {
+                            params:
+                            {
+                                api_key : this.key,
+                                append_to_response : "credits",
+                                language : "it-IT"
+                            }
+                        }).then((response) => {
+                            element.cast = response.data.credits.cast.slice(0, 5);
+                            element.genres = [];
+                            response.data.genres.forEach((item) => {
+                                element.genres.push(item.name);
+                            });
+                        });
+                });
             },
 
             //Questa funzione filtra i risultati con lingua diversa dalle bandiere disponibili e i risultati senza poster path
