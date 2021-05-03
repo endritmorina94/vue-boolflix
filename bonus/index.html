@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Boolflix</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+
+<body>
+    <!-- INIZIO WRAPPER -->
+    <div class="wrapper" id="root">
+
+        <div class="app">
+            <div class="bg-image"></div>
+            <!-- Inizio Header -->
+            <header>
+
+                <div class="logo">
+                    <h1>
+                        <span class="red">Bool</span>flix
+                    </h1>
+                </div>
+
+                <div class="navigator">
+                    <ul class="top-nav">
+                        <li class="active">
+                            <a href="#">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Explore
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Trending
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Coming soon
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Box Office
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="top-right-button">
+
+                    <button class="sign-in-btn">
+                        Sign in
+                    </button>
+
+                </div>
+
+            </header>
+            <!-- Fine Header -->
+
+            <!-- INIZIO MAIN -->
+            <main>
+                <!-- Inizio Carousel -->
+                <section class="carousel" id="carosello">
+
+                    <!-- Inizio Single Movie Card -->
+                    <div v-for="(entry, index) in newEntries" class="card-container">
+                        <div class="card" :class="{'active-card' : (index == activeCard), 'right' : checkIfNextToActive(index)}"
+                        @click="nextPrev(index)">
+                            <div class="poster-container">
+                                    <img :src="`https://image.tmdb.org/t/p/w342${entry.poster_path}`" alt="{{entry.title}}">
+                            </div>
+
+                            <div class="movie-info">
+                                <h3>{{ entry.title }}</h3>
+                                <span class="voto">
+                                    <span v-if="entry.vote_average > 0">
+                                        <i v-for="star in entry.vote_average" class="fas fa-star"></i><i v-for="star in 5 - entry.vote_average" class="fas fa-star off"></i>
+                                        <span class="voters">{{ entry.vote_count }} voters</span>
+                                    </span>
+                                </span>
+
+                                <p>
+                                    {{ entry.overview }}
+                                </p>
+
+                                <div class="card-bottom">
+                                    <div class="cast">
+                                        <span class="actor" v-for="actor in entry.cast">
+                                            {{ actor.name }}
+                                        </span>
+                                    </div>
+
+                                    <div class="card-buttons">
+                                        <a href="">
+                                            Watch Trailer
+                                        </a>
+
+                                        <div class="play-movie-btn">
+                                            <i class="far fa-play-circle"></i> Play Now
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fine Single Movie Card -->
+                </section>
+                <!-- Fine Carousel -->
+
+                <!-- Inizio Searching Section -->
+                <section class="searching-section">
+
+                    <!-- Inizio Bottom Header -->
+                    <header>
+                        <div class="search">
+                            <input v-model="query" type="text" @keyup.enter="search()">
+                        </div>
+
+                        <ul class="genres">
+                            <li v-for="(genre, index) in genres" @click="toggleActive(index); genreChoosen = true"
+                            :class="{active : genre.isActive}">
+                                {{ genre.name }}
+                            </li>
+
+                        </ul>
+                    </header>
+                    <!-- Fine Bottom Header -->
+
+                </section>
+                <!-- Fine Searching Section -->
+
+                <!-- Inizio Discover Section -->
+                <section class="discover">
+                    <div v-if="movies.length > 0" v-for="movie in movies" class="discover-card">
+                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
+                        <h3>{{ movie.title }}</h3>
+                        <span class="voto">
+                            <span v-if="movie.vote_average">
+                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+                            </span>
+                        </span>
+                    </div>
+
+                    <!-- v-if="genreChoosen || movie.genre == genres[indexOfGen].name"  -->
+
+                    <div v-if="genreChoosen == false" v-for="movie in preloadedMovies" class="discover-card">
+                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="movie.title">
+                        <h3>{{ movie.title }}</h3>
+                        <span class="voto">
+                            <span v-if="movie.vote_average">
+                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+                            </span>
+                        </span>
+                    </div>
+
+                    <div v-if="genreChoosen">
+                        <div v-for="movie in preloadedMovies" v-if="movie.genres.includes(genres[indexOfGen].name)" class="discover-card">
+
+                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="movie.title">
+                        <h3>{{ movie.title }}</h3>
+                        <span class="voto">
+                            <span v-if="movie.vote_average">
+                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+                            </span>
+                        </span>
+                        </div>
+                    </div>
+                </section>
+                <!-- Fine Discover Section -->
+
+
+            </main>
+            <!-- FINE MAIN -->
+
+        </div>
+
+    </div>
+    <!-- FINE WRAPPER -->
+    <script src="js/script.js" charset="utf-8"></script>
+</body>
+
+</html>
