@@ -57,37 +57,23 @@
                                     <span v-if="movie.vote_average">
                                         <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="far fa-star"></i>
                                     </span>
-                                    <span v-else>
-                                        n/d
-                                    </span>
                                 </li>
                                 <li>
                                     <b>Cast:</b>
                                         <span class="actor" v-for="actor in movie.cast">
                                             {{ actor.name }}
                                         </span>
-
-                                    <span v-else>
-                                        n/d
-                                    </span>
                                 </li>
                                 <li>
                                     <b>Overview:</b>
                                     <span>
                                         {{ movie.overview }}
                                     </span>
-                                    <span v-else>
-                                        n/d
-                                    </span>
                                 </li>
-                                <li v-if="movie.genres.length > 0">
+                                <li>
                                     <b>Genere:</b>
-                                        <span class="genre" v-for="gender in movie.genres">
-                                            {{ gender }}
-                                        </span>
-
-                                    <span v-else>
-                                        n/d
+                                    <span class="genre" v-for="gender in movie.genres">
+                                        {{ gender }}
                                     </span>
                                 </li>
                             </ul>
