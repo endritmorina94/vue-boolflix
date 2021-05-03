@@ -35,6 +35,8 @@ var app = new Vue(
                         this.addGenresAndCredits(result, "movie");
                         //Passo il tutto all'array movies
                         this.movies= result;
+
+                        console.log(result);
                     });
 
                 //Seconda chiamata per le serie (tutto quello che abbiamo fatto sopra ma con le serie)
@@ -53,6 +55,7 @@ var app = new Vue(
                         this.splitVote(result);
                         this.addGenresAndCredits(result, "tv");
                         this.series = result;
+
                     });
             },
 
@@ -105,9 +108,6 @@ var app = new Vue(
                 } else {
                     return false;
                 }
-
-
-
             }
         },
         mounted() {
