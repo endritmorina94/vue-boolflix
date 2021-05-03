@@ -6,8 +6,10 @@ var app = new Vue(
             query: "",
             movies: [],
             series: [],
+            genres: [],
             // Bandiere disponibili
-            languages: ["en", "de", "it", "fr", "ru"]
+            languages: ["en", "de", "it", "fr", "ru"],
+            genreChoosen: ""
         },
         methods: {
             //Questa funzione chiama la ricerca, restituendo i risultati dell'API all'interno dei nostri array movies e series
@@ -77,9 +79,8 @@ var app = new Vue(
                             // Cicliamo i generi e li pushiamo nell'array vuoto
                             response.data.genres.forEach((item) => {
                                 element.genres.push(item.name);
+                                this.genres.push(item.name);
                             });
-
-                            console.log(element);
                         });
                 });
             },
@@ -94,6 +95,17 @@ var app = new Vue(
                 array.forEach((element) => {
                     element.vote_average = Math.round(element.vote_average / 2);
                 });
+            },
+
+            filterByGenre(element) {
+                if (this.genreChoosen == "" || element.genres.includes(genreChoosen)) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+                console.log(genreChoosen);
+
             }
         },
         mounted() {

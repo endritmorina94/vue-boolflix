@@ -17,6 +17,11 @@
             <header>
                 <h1>Boolflix</h1>
                 <div class="search">
+                    <select v-model="genreChoosen">
+                        <option value="">All</option>
+                        <option v-for="genre in genres" :value="genre">{{ genre }}</option>
+
+                    </select>
                     <input type="text" v-model="query" >
                     <button class="search-button" @click="search()">Cerca</button>
                 </div>
@@ -25,12 +30,13 @@
 
             <main>
                 <!-- Movies Section -->
-                <section>
-                    <h2 v-if="movies.length > 0">Movies</h2>
+                <section v-if="movies.length > 0">
+                    <h2>Movies</h2>
                     <!-- Movies Container -->
                     <div class="posters-container">
+
                         <!-- Inizio Single Movie -->
-                        <div v-for="movie in movies" class="card">
+                        <div v-for="movie in movies" v-if="filterByGenre(movie)" class="card">
                             <!-- Poster -->
                             <img class="poster" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
                             <!-- Movie Infos -->
@@ -56,7 +62,7 @@
                                         n/d
                                     </span>
                                 </li>
-                                <li v-if="movie.cast.length">
+                                <li>
                                     <b>Cast:</b>
                                         <span class="actor" v-for="actor in movie.cast">
                                             {{ actor.name }}
@@ -68,14 +74,14 @@
                                 </li>
                                 <li>
                                     <b>Overview:</b>
-                                    <span v-if="movie.overview.length">
+                                    <span>
                                         {{ movie.overview }}
                                     </span>
                                     <span v-else>
                                         n/d
                                     </span>
                                 </li>
-                                <li v-if="movie.genres.length">
+                                <li>
                                     <b>Genere:</b>
                                         <span class="genre" v-for="gender in movie.genres">
                                             {{ gender }}

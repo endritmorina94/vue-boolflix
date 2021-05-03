@@ -151,7 +151,7 @@
                 <section class="discover">
 
                     <div class="searched" v-if="movies.length != 0">
-                        <div v-for="(movie, index) in movies" v-if="filterByGenre(movie)" class="discover-card">
+                        <div v-for="movie in movies" v-if="filterByGenre(movie)" class="discover-card">
                             <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" :alt="movie.title">
                             <h3>{{ movie.title }}</h3>
                             <span class="voto">
@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="reccomended" v-else>
-                        <div v-else v-for="(movie, index) in preloadedMovies" v-if="filterByGenre(movie)" class="discover-card">
+                        <div v-else v-for="movie in preloadedMovies" v-if="filterByGenre(movie)" class="discover-card">
                             <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" :alt="movie.title">
                             <h3>{{ movie.title }}</h3>
                             <span class="voto">
