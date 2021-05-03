@@ -20,7 +20,6 @@
                     <select v-model="genreChoosen">
                         <option value="">All</option>
                         <option v-for="genre in genres" :value="genre">{{ genre }}</option>
-
                     </select>
                     <input type="text" v-model="query" >
                     <button class="search-button" @click="search()">Cerca</button>
@@ -81,7 +80,7 @@
                                         n/d
                                     </span>
                                 </li>
-                                <li>
+                                <li v-if="movie.genres.length > 0">
                                     <b>Genere:</b>
                                         <span class="genre" v-for="gender in movie.genres">
                                             {{ gender }}
@@ -94,6 +93,7 @@
                             </ul>
                         </div>
                         <!-- Fine Single Movie -->
+
                     </div>
                     <!-- Fine Movies Container -->
                 </section>

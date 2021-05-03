@@ -18,9 +18,10 @@ var app = new Vue(
                 axios
                     .get("https://api.themoviedb.org/3/search/movie?", {
                         params:
-                        { api_key : this.key,
-                          query : this.query,
-                          page : 1
+                        {
+                            api_key : this.key,
+                            query : this.query,
+                            page : 1
                         }
                     }).then((response) => {
                         //Metto in una variabile i film
@@ -40,9 +41,10 @@ var app = new Vue(
                 axios
                     .get("https://api.themoviedb.org/3/search/tv?", {
                         params:
-                        { api_key : this.key,
-                          query : this.query,
-                          page : 1
+                        {
+                            api_key : this.key,
+                            query : this.query,
+                            page : 1
                         }
                     }).then((response) => {
                         let result = response.data.results;
@@ -98,13 +100,13 @@ var app = new Vue(
             },
 
             filterByGenre(element) {
-                if (this.genreChoosen == "" || element.genres.includes(genreChoosen)) {
+                if (this.genreChoosen == "" || element.genres.includes(this.genreChoosen)) {
                     return true;
                 } else {
                     return false;
                 }
 
-                console.log(genreChoosen);
+
 
             }
         },
