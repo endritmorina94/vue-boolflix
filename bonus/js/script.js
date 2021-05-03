@@ -25,17 +25,20 @@ var app = new Vue(
                     isActive: false
                 },
                 {
-                    name: "Science Fiction",
+                    name: "Crime",
                     isActive: false
                 },
                 {
-                    name: "Thriller",
+                    name: "Drama",
+                    isActive: false
+                },
+                {
+                    name: "Science Fiction",
                     isActive: false
                 }
             ],
             activeCard: 1,
             indexOfGen: -1,
-            genreChoosen: false,
             scroll: parseInt(getComputedStyle(document.getElementById("carosello")).right)
         },
         methods: {
@@ -100,17 +103,25 @@ var app = new Vue(
                     item.isActive = false;
                 });
 
-                // this.genres[ind].isActive = !this.genres[ind].isActive;
-
                 if (this.genres[ind].isActive == false){
                     this.genres[ind].isActive = true;
                     this.indexOfGen = ind;
                 }else {
                     this.genres[ind].isActive = false;
-                    this.indexOfGen = -1;ùù
+                    this.indexOfGen = -1;
                 }
 
-                console.log(this.indexOfGen);
+                console.log(this.genres[this.indexOfGen].name);
+                console.log("cane", this.preloadedMovies)
+            },
+
+            filterByGenre(element) {
+
+                if (this.indexOfGen == -1 || element.genres.includes(this.genres[this.indexOfGen].name)) {
+                    return true;
+                }else {
+                    return false;
+                }
             },
 
             //Questa funzione chiama la ricerca, restituendo i risultati dell'API all'interno dei nostri array movies e series
@@ -224,15 +235,15 @@ var app = new Vue(
 
                 });
 
-                // Creo un array con 30 film Top Rated
-                for (let i = 1; i < 4; i++) {
+                // Creo un array con 50 film popolari
+                for (let i = 1; i < 6; i++) {
                     axios
-                        .get("https://api.themoviedb.org/3/movie/top_rated?", {
+                        .get("https://api.themoviedb.org/3/movie/popular?", {
                             params:
                             {
                                 api_key : this.key,
                                 language : "it-IT",
-                                page: this.i
+                                page: i
                             }
                             //Della risposta prenderemo i primi 5 oggetti del cast e aggiugneremo i generi
                         }).then((response) => {
@@ -250,8 +261,9 @@ var app = new Vue(
 
                         });
 
-                        console.log(this.preloadedMovies);
                 }
+                console.log(this.preloadedMovies);
+
         }
     }
 );

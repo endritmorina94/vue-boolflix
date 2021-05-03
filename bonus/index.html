@@ -85,7 +85,7 @@
                         <div class="card" :class="{'active-card' : (index == activeCard), 'right' : checkIfNextToActive(index)}"
                         @click="nextPrev(index)">
                             <div class="poster-container">
-                                    <img :src="`https://image.tmdb.org/t/p/w342${entry.poster_path}`" alt="{{entry.title}}">
+                                    <img :src="`https://image.tmdb.org/t/p/w342${entry.poster_path}`" :alt="entry.title">
                             </div>
 
                             <div class="movie-info">
@@ -149,47 +149,35 @@
 
                 <!-- Inizio Discover Section -->
                 <section class="discover">
-                    <div v-if="movies.length > 0" v-for="movie in movies" class="discover-card">
-                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="{{movie.title}}">
-                        <h3>{{ movie.title }}</h3>
-                        <span class="voto">
-                            <span v-if="movie.vote_average">
-                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+
+                    <div class="searched" v-if="movies.length != 0">
+                        <div v-for="(movie, index) in movies" v-if="filterByGenre(movie)" class="discover-card">
+                            <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" :alt="movie.title">
+                            <h3>{{ movie.title }}</h3>
+                            <span class="voto">
+                                <span v-if="movie.vote_average">
+                                    <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+                                </span>
                             </span>
-                        </span>
-                    </div>
-
-                    <!-- v-if="genreChoosen || movie.genre == genres[indexOfGen].name"  -->
-
-                    <div v-if="genreChoosen == false" v-for="movie in preloadedMovies" class="discover-card">
-                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="movie.title">
-                        <h3>{{ movie.title }}</h3>
-                        <span class="voto">
-                            <span v-if="movie.vote_average">
-                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
-                            </span>
-                        </span>
-                    </div>
-
-                    <div v-if="genreChoosen">
-                        <div v-for="movie in preloadedMovies" v-if="movie.genres.includes(genres[indexOfGen].name)" class="discover-card">
-
-                        <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="movie.title">
-                        <h3>{{ movie.title }}</h3>
-                        <span class="voto">
-                            <span v-if="movie.vote_average">
-                                <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
-                            </span>
-                        </span>
                         </div>
                     </div>
+
+                    <div class="reccomended" v-else>
+                        <div v-else v-for="(movie, index) in preloadedMovies" v-if="filterByGenre(movie)" class="discover-card">
+                            <img :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" :alt="movie.title">
+                            <h3>{{ movie.title }}</h3>
+                            <span class="voto">
+                                <span v-if="movie.vote_average">
+                                    <i v-for="star in movie.vote_average" class="fas fa-star"></i><i v-for="star in 5 - movie.vote_average" class="fas fa-star off"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
                 </section>
                 <!-- Fine Discover Section -->
-
-
             </main>
             <!-- FINE MAIN -->
-
         </div>
 
     </div>

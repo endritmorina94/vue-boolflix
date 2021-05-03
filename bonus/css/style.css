@@ -11,7 +11,7 @@ body {
 }
 
 .wrapper {
-    background-color: #eb4444;
+    background-color: #c42f2f;
     width: 100%;
     min-height: 100vh;
     padding-top: 50px;
@@ -23,7 +23,7 @@ body {
     height: 100%;
     margin: 0 auto;
     background: radial-gradient(circle, rgba(43,54,64,1) 5%, rgba(32,36,40,1) 50%, rgba(31,34,38,1) 100%);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
     overflow: hidden;
     position: relative;
 }
@@ -366,6 +366,10 @@ li a {
 .discover {
     width: 80%;
     margin: 60px auto 0;
+}
+
+.searched,
+.reccomended {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
