@@ -1,4 +1,3 @@
-
 var app = new Vue(
     {
         el: '#root',
@@ -7,36 +6,10 @@ var app = new Vue(
             query: "",
             movies: [],
             series: [],
-            // Bandiere disponibili
-            languages: ["en", "de", "it", "fr", "ru"],
             newEntries: [],
             preloadedMovies: [],
-            genres: [
-                {
-                    name: "Action",
-                    isActive: false
-                },
-                {
-                    name: "Adventure",
-                    isActive: false
-                },
-                {
-                    name: "Comedy",
-                    isActive: false
-                },
-                {
-                    name: "Crime",
-                    isActive: false
-                },
-                {
-                    name: "Drama",
-                    isActive: false
-                },
-                {
-                    name: "Science Fiction",
-                    isActive: false
-                }
-            ],
+            genres: [],
+            genresVariety: [],
             activeCard: 1,
             indexOfGen: -1,
             scroll: parseInt(getComputedStyle(document.getElementById("carosello")).right)
@@ -62,25 +35,17 @@ var app = new Vue(
                     const carousel = document.getElementById("carosello");
                     const slideWidth = document.querySelectorAll('.card')[this.activeCard].clientWidth;
 
-                    console.log(slideWidth);
-                    console.log(carousel);
-                    console.log(this.scroll);
 
                     if( index > this.activeCard){
                         this.scroll += slideWidth;
 
                         carousel.style.left = `${-this.scroll}px`;
                         this.activeCard += 1;
-                        console.log(this.activeCard);
-                        console.log(index);
 
                         if (index > this.newEntries.length - 1){
                             this.activeCard = 1;
                             carousel.style.left = "0px";
                             this.scroll = parseInt(getComputedStyle(document.getElementById("carosello")).right);
-
-                            console.log(this.activeCard);
-                            console.log(index);
                         }
                     } else {
                         this.scroll -= slideWidth;
@@ -98,6 +63,7 @@ var app = new Vue(
             },
             // Fine Funzioni Slider
 
+            //Questa funzione toggla la classe active per i generi
             toggleActive(ind) {
                 this.genres.forEach((item) => {
                     item.isActive = false;
@@ -111,10 +77,9 @@ var app = new Vue(
                     this.indexOfGen = -1;
                 }
 
-                console.log(this.genres[this.indexOfGen].name);
-                console.log("cane", this.preloadedMovies)
             },
 
+            //Questa funzione filtra i risultati per genere
             filterByGenre(element) {
 
                 if (this.indexOfGen == -1 || element.genres.includes(this.genres[this.indexOfGen].name)) {
@@ -126,6 +91,15 @@ var app = new Vue(
 
             //Questa funzione chiama la ricerca, restituendo i risultati dell'API all'interno dei nostri array movies e series
             search() {
+                // --- Reset degli array ad ogni ricerca ---
+                this.movies = [];
+                this.series = [];
+                this.genres.forEach((item) => {
+                    item.isActive = false;
+                });
+                this.indexOfGen = -1;
+                // --- Fine Reset degli array ---
+
                 //Prima chiamata per i film
                 axios
                     .get("https://api.themoviedb.org/3/search/multi?", {
@@ -170,6 +144,10 @@ var app = new Vue(
             //moviesOrSeriesArray ==> è l'array di film o serie
             //type ==> è una stringa con il tipo di ricerca che andremo a fare: "movie" o "tv"
             addGenresAndCredits(moviesOrSeriesArray, type){
+                //Reset degli array con i generi
+                this.genresVariety = [];
+                this.genres = [];
+                
                 //Ciclo tutit gl'elementi dell'array usando il loro id per fare la chiamata axios
                 moviesOrSeriesArray.forEach((element) => {
                     axios
@@ -192,14 +170,27 @@ var app = new Vue(
                                 element.genres.push(item.name);
                             });
 
-                            console.log(element);
+                            response.data.genres.forEach((item) => {
+
+                                if (!this.genresVariety.includes(item.name) && this.genresVariety.length < 6 ){
+                                        this.genresVariety.push(item.name);
+                                        this.genres.push(
+                                            {
+                                                name: item.name,
+                                                isActive: false
+                                            }
+                                        );
+                                }
+
+                            });
+
                         });
                 });
             },
 
             //Questa funzione filtra i risultati con lingua diversa dalle bandiere disponibili e i risultati senza poster path
             filterEmptyFields(array) {
-                return array.filter((element) => this.languages.includes(element.original_language) && element.poster_path != null);
+                return array.filter((element) => element.title != null && element.poster_path != null);
             },
 
             //Questa funzione divide il voto del film o della serie per due e lo arrotonda
@@ -211,7 +202,7 @@ var app = new Vue(
 
         },
         mounted() {
-
+            //Faccio una chiamata per avere 10 film in arrivo nelle sale da mostrare nello slider
             axios
                 .get("https://api.themoviedb.org/3/movie/upcoming?", {
                     params:
@@ -231,11 +222,9 @@ var app = new Vue(
 
                     this.newEntries = result;
 
-                    console.log(this.newEntries);
-
                 });
 
-                // Creo un array con 50 film popolari
+                //Creo un array con 50 film popolari
                 for (let i = 1; i < 6; i++) {
                     axios
                         .get("https://api.themoviedb.org/3/movie/popular?", {
@@ -262,7 +251,6 @@ var app = new Vue(
                         });
 
                 }
-                console.log(this.preloadedMovies);
 
         }
     }
