@@ -8,6 +8,7 @@
 body {
     font-family: 'Quicksand', sans-serif;
     color: #E6E3E3;
+    min-width: 960px;
 }
 
 .wrapper {
@@ -373,6 +374,7 @@ i.off{
 
 .search {
     position: relative;
+    top: 6px;
 }
 
 .search input {
@@ -414,17 +416,17 @@ i.off{
 
 .searched,
 .reccomended {
-    margin-right: -30px;
+    margin-right: -40px;
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
 }
 
 .discover-card {
-    width: calc(100% / 4 - 30px);
+    width: calc(100% / 5 - 40px);
     max-width: 250px;
     margin-bottom: 30px;
-    margin-right: 30px;
+    margin-right: 40px;
 }
 
 .discover-card img {
@@ -434,6 +436,48 @@ i.off{
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
     margin-bottom: 10px;
 }
-
 /* Fine Discover Section */
 /* FINE MAIN */
+
+/* RESPONSIVE SECTION */
+
+@media screen and (max-width: 1700px) {
+
+    .searched,
+    .reccomended {
+        margin-right: -50px;
+    }
+
+    .discover-card {
+        width: calc(100% / 4 - 50px);
+        margin-right: 50px;
+    }
+
+}
+
+@media screen and (max-width: 1500px) {
+
+    .searched,
+    .reccomended {
+        margin-right: -30px;
+    }
+
+    .discover-card {
+        width: calc(100% / 4 - 30px);
+        margin-right: 30px;
+    }
+
+}
+
+
+@media screen and (max-width: 1200px) {
+
+    .wrapper {
+        padding-top: 0;
+    }
+
+    .app {
+        width: 100%;
+    }
+
+}

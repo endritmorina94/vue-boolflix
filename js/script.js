@@ -81,7 +81,9 @@ var app = new Vue(
                             // Cicliamo i generi e li pushiamo nell'array vuoto
                             response.data.genres.forEach((item) => {
                                 element.genres.push(item.name);
+                                if (!this.genres.includes(item.name)) {
                                 this.genres.push(item.name);
+                                }
                             });
                         });
                 });
