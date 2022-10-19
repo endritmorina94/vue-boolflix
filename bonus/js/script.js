@@ -1,4 +1,4 @@
-import Vue from 'vue'
+window.Vue = require('vue');
 
 var app = new Vue(
     {
